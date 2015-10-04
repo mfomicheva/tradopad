@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.1/themes/redmond/jquery-ui.css" rel="stylesheet" />
+        <script type='text/javascript' src='https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js'> </script>
+        <script  type='text/javascript' src='https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.1/jquery-ui.min.js'></script>
+        {% load staticfiles %}
+        <link rel="stylesheet" href="{% static 'rater/css/rater.css' %}" />
+        <script type='text/javascript'>
+            var selectedValue = 50;
+
+            $(function () {
+                $('#rating').val(selectedValue);
+                var slider = $("#slider").slider({
+                    orientation: "horizontal",
+                    min: 0,
+                    max: 100,
+                    value: 50,
+                    slide: function (event, ui) {
+                        $('#rating').val(ui.value);
+                        selectedValue = ui.value;
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="main">
+            <div class="highlight-box">
+                <h3>The black text adequately expresses the meaning of the gray text in Spanish.</h3>
+            </div>
+
+            <div id="content">
+                <div id="reference">{{ segment.reference }}</div>
+                <div id="translation">{{ segment.translation }}</div>
+
+                <div id="slider-content">
+                    <div class="slider-label">Strongly disagree</div>
+                    <div id="slider">&nbsp;</div>
+                    <div class="slider-label">Strongly agree</div>
+                </div>
+
+                <form action="{% url 'rater:submit_rating' segment.pk %}" method="post">
+                    {% csrf_token %}
+                    <input id="rating" name="rating" type="hidden" />
+                    <label>Translation {{ segment_number }}/{{ total_segments }}</label>
+                    {% if segment_number < total_segments %}
+                    <input id="submit_next" type="submit" value="Next" />
+                    {% endif %}
+                    {% if segment_number == total_segments %}
+                    <input id="submit_done" type="submit" value="Done" class="green" />
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

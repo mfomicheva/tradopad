@@ -1,0 +1,24 @@
+<html>
+<head>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'rater/css/rater.css' %}" />
+    <title>Translation rating for UPF</title>
+</head>
+
+<body>
+    <div id="main">
+        <h1>Enter your email to start rating</h1>
+
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+        <div id="access">
+            <form action="{% url 'rater:access' %}" method="post">
+                {% csrf_token %}
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" value="" placeholder="email@example.com" />
+                <input type="submit" value="Start" />
+            </form>
+        </div>
+    </div>
+</body>
+</html>

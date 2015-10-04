@@ -1,0 +1,90 @@
+#main {
+    width: 100%;
+    text-align: center;
+    padding-top: 100px;
+}
+
+#access {
+    display: table;
+    text-align: left;
+    margin: 0 auto;
+    width: 450px;
+}
+
+#access input {
+    font-size: 14px;
+}
+
+#access input[type=email] {
+    width: 250px;
+}
+
+#access input[type=submit], #content input[type=submit] {
+    width: 150px;
+    background-color: lightblue;
+}
+
+#content input[type=submit].green {
+    background-color: lightgreen;
+}
+
+#content {
+    display: table;
+    margin: 0 auto;
+    width: 735px;
+    text-align: right;
+}
+#content #translation, #content #reference {
+    width: 735px;
+    text-align: left;
+    margin: 20px;
+    padding: 15px;
+    border: 1px dashed grey;
+    font-size: 18px;
+}
+
+#content #translation {
+    color: black;
+}
+
+#content #reference {
+    color: darkgrey;
+}
+
+#content form {
+    margin-top: 30px;
+}
+
+#slider-content {
+    display: table;
+    margin: 0 auto;
+    width: 720px;
+    height: 30px;
+    margin-top: 30px;
+    line-height: 8px;
+}
+
+#slider {
+    width: 450px;
+    height: 8px;
+    text-align: center;
+}
+
+#slider, .slider-label {
+    float: left;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+#slider .tick {
+    position: absolute;
+    height: 100%;
+    font-size: 0px;
+    line-height: 8px;
+    top: -1px;
+}
+
+#slider .ui-slider-handle {
+    width: 20px
+}
+
