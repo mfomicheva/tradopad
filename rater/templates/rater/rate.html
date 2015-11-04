@@ -26,17 +26,18 @@
     <body>
         <div id="main">
             <div class="highlight-box">
-                <h3>The black text adequately expresses the meaning of the gray text in Spanish.</h3>
+                <h3>Rate the quality of the machine translation using the scale below.</h3>
             </div>
 
             <div id="content">
-                <div id="reference">{{ segment.reference }}</div>
-                <div id="translation">{{ segment.translation }}</div>
+                <div id="reference">Human translation:<br /><br />{{ segment.reference }}</div>
+
+                <div id="translation">Machine translation:<br /><br />{{ segment.translation }}</div>
 
                 <div id="slider-content">
-                    <div class="slider-label">Strongly disagree</div>
+                    <div class="slider-label">Bad</div>
                     <div id="slider">&nbsp;</div>
-                    <div class="slider-label">Strongly agree</div>
+                    <div class="slider-label">Good</div>
                 </div>
 
                 <form action="{% url 'rater:submit_rating' segment.pk %}" method="post">
