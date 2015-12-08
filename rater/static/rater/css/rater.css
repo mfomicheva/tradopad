@@ -55,7 +55,7 @@
     margin-top: 30px;
 }
 
-#slider-content {
+#slider-content, #choice-content {
     display: table;
     margin: 0px;
     width: 100%;
@@ -64,10 +64,20 @@
     line-height: 8px;
     padding-left: 20px;
     padding-right: 20px;
+    text-align: left;
+}
+
+#choice-content label {
+    margin-right: 25px;
+    font-size: 25px
+}
+
+#choice-content input {
+    margin-right: 7px;
+    height: 20px
 }
 
 #slider {
-    width: 680px;
     height: 8px;
     text-align: center;
     margin-left: 10px;

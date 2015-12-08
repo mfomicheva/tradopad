@@ -1,8 +1,12 @@
-from django.http import HttpResponse, HttpResponseRedirect
+import random
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
+from dynamic_preferences import global_preferences_registry
 from .models import Rater, Segment, Rating
+
+global_preferences = global_preferences_registry.manager()
 
 
 def index(request):
@@ -16,7 +20,10 @@ def finish(request):
 
 
 def access(request):
-    rater, created = Rater.objects.get_or_create(email=request.POST['email'], batch_id=0)
+    rater, created = Rater.objects.get_or_create(email=request.POST['email'])
+    if created:
+        rater.batch_id = random.randint(1, int(global_preferences['rater__number_of_batches']))
+        rater.save()
     response = HttpResponseRedirect(reverse('rater:rate'))
     response.set_cookie('rater_pk', rater.pk)
     return response
@@ -48,5 +55,6 @@ def rate(request):
         'total_segments': total_segments,
         'segment_number': segment_number,
         'segment': segment,
+        'choices': global_preferences['rater__single_choice_options'].split(';'),
     })
     return HttpResponse(template.render(context))

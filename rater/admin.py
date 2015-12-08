@@ -26,6 +26,7 @@ class SegmentAdmin(admin.ModelAdmin):
 class RaterAdmin(admin.ModelAdmin):
     list_display = ['email']
 
+
 admin.site.register(Segment, SegmentAdmin)
 admin.site.register(Rater, RaterAdmin)
 admin.site.register(Rating, RatingAdmin)

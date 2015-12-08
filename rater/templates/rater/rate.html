@@ -5,28 +5,11 @@
         <script  type='text/javascript' src='https://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.1/jquery-ui.min.js'></script>
         {% load staticfiles %}
         <link rel="stylesheet" href="{% static 'rater/css/rater.css' %}" />
-        <script type='text/javascript'>
-            var selectedValue = 50;
-
-            $(function () {
-                $('#rating').val(selectedValue);
-                var slider = $("#slider").slider({
-                    orientation: "horizontal",
-                    min: 0,
-                    max: 100,
-                    value: 50,
-                    slide: function (event, ui) {
-                        $('#rating').val(ui.value);
-                        selectedValue = ui.value;
-                    }
-                });
-            });
-        </script>
     </head>
     <body>
         <div id="main">
             <div class="highlight-box">
-                <h3>Rate the quality of the machine translation using the scale below.</h3>
+                <h3>{{ global_preferences.rater__rating_question }}</h3>
             </div>
 
             <div id="content">
@@ -34,13 +17,25 @@
 
                 <div id="translation">Machine translation:<br /><br />{{ segment.translation }}</div>
 
+                {% if global_preferences.rater__rating_scale == 'continuous_scale' %}
                 <div id="slider-content">
-                    <div class="slider-label">Bad</div>
+                    <div id="slider-min-label" class="slider-label">{{ global_preferences.rater__continuous_scale_min_label }}</div>
                     <div id="slider">&nbsp;</div>
-                    <div class="slider-label">Good</div>
+                    <div id="slider-max-label" class="slider-label">{{ global_preferences.rater__continuous_scale_max_label }}</div>
                 </div>
+                {% endif %}
 
-                <form action="{% url 'rater:submit_rating' segment.pk %}" method="post">
+                {% if global_preferences.rater__rating_scale == 'single_choice' %}
+                <div id="choice-content">
+                    {% for choice in choices %}
+                    <input id="choice_{{ choice }}" type="radio" name="choice" value="{{ forloop.counter }}" onclick="$('#rating').val(this.value)">
+                    <label for="choice_{{ choice }}">{{ choice }}</label>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+
+                <form id="submit_form" action="{% url 'rater:submit_rating' segment.pk %}" method="post">
                     {% csrf_token %}
                     <input id="rating" name="rating" type="hidden" />
                     <label>Translation {{ segment_number }}/{{ total_segments }}</label>
@@ -53,5 +48,38 @@
                 </form>
             </div>
         </div>
+
+        {% if global_preferences.rater__rating_scale == 'continuous_scale' %}
+        <script type='text/javascript'>
+            var selectedValue;
+            $(function () {
+                $('#rating').val(selectedValue);
+                var slider = $("#slider").slider({
+                    orientation: "horizontal",
+                    min: {{ global_preferences.rater__continuous_scale_min }},
+                    max: {{ global_preferences.rater__continuous_scale_max }},
+                    value: ({{ global_preferences.rater__continuous_scale_max }} + {{global_preferences.rater__continuous_scale_min }})/2,
+                    slide: function (event, ui) {
+                        $('#rating').val(ui.value);
+                        selectedValue = ui.value;
+                    }
+                });
+
+                $('#slider').width($('#slider-content').width() - $('#slider-min-label').width() - $('#slider-max-label').width() - 30)
+            });
+        </script>
+        {% endif %}
+
+        {% if global_preferences.rater__rating_scale == 'single_choice' %}
+        <script type='text/javascript'>
+            $('#submit_form').submit(function(event) {
+                if (!$.isNumeric($('#rating').val())) {
+                    alert('Please choose an answer');
+                    return false;
+                }
+                return true;
+            });
+        </script>
+        {% endif %}
     </body>
 </html>

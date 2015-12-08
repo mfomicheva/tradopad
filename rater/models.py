@@ -3,7 +3,7 @@ from django.db import models
 
 class Rater(models.Model):
     email = models.CharField(max_length=200)
-    batch_id = models.IntegerField()
+    batch_id = models.IntegerField(default=0)
 
 
 class Segment(models.Model):
