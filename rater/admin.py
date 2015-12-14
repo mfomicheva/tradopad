@@ -1,4 +1,6 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin, ImportExportMixin
+from import_export import resources
 
 from .models import Segment, Rater, Rating
 
@@ -18,9 +20,12 @@ class RatingAdmin(admin.ModelAdmin):
     get_segment_translation.short_description = 'Translation'
     get_segment_translation.admin_order_field = 'segment__pk'
 
+class SegmentResource(resources.ModelResource):
+    class Meta:
+        model = Segment
 
-class SegmentAdmin(admin.ModelAdmin):
-    list_display = ['translation', 'reference']
+class SegmentAdmin(ImportExportMixin, admin.ModelAdmin):
+    list_display = ['id', 'translation', 'reference', 'batch_id']
 
 
 class RaterAdmin(admin.ModelAdmin):
