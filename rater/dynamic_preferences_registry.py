@@ -69,3 +69,11 @@ class NumberOfButches(IntegerPreference):
     name = 'number_of_batches'
     default = 1
     help_text = 'number of batches rated segments are divided into'
+
+
+@global_preferences_registry.register
+class NumberOfRatersPerButches(IntegerPreference):
+    section = preferences_section
+    name = 'number_of_raters_per_batch'
+    default = 5
+    help_text = 'number of raters who should fully rater all the segments in batch to consider it rated'

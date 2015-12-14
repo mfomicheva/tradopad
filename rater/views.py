@@ -22,7 +22,20 @@ def finish(request):
 def access(request):
     rater, created = Rater.objects.get_or_create(email=request.POST['email'])
     if created:
-        rater.batch_id = random.randint(1, int(global_preferences['rater__number_of_batches']))
+        max_raters = int(global_preferences['rater__number_of_raters_per_batch'])
+        is_rated = True
+        batch_number = 0
+        for b in range(1, int(global_preferences['rater__number_of_batches']) + 1):
+            batch_number = b
+            for segment in Segment.objects.filter(batch_id=b):
+                if Rating.objects.filter(segment_id=segment.id).count() < max_raters:
+                    is_rated = False
+                    break
+
+            if not is_rated:
+                break
+
+        rater.batch_id = random.randint(1, batch_number)
         rater.save()
     response = HttpResponseRedirect(reverse('rater:rate'))
     response.set_cookie('rater_pk', rater.pk)
