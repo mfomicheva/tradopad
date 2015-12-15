@@ -4,6 +4,7 @@ from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect, render
 from dynamic_preferences import global_preferences_registry
+from django.core.cache import cache
 from .models import Rater, Segment, Rating
 
 global_preferences = global_preferences_registry.manager()
@@ -25,17 +26,19 @@ def access(request):
         max_raters = int(global_preferences['rater__number_of_raters_per_batch'])
         is_rated = True
         batch_number = 0
+        cache.clear()
+
         for b in range(1, int(global_preferences['rater__number_of_batches']) + 1):
             batch_number = b
             for segment in Segment.objects.filter(batch_id=b):
-                if Rating.objects.filter(segment_id=segment.id).count() < max_raters:
+                if Rating.objects.filter(segment=segment).count() < max_raters:
                     is_rated = False
                     break
 
             if not is_rated:
                 break
 
-        rater.batch_id = random.randint(1, batch_number)
+        rater.batch_id = batch_number
         rater.save()
     response = HttpResponseRedirect(reverse('rater:rate'))
     response.set_cookie('rater_pk', rater.pk)
