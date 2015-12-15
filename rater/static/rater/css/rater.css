@@ -43,6 +43,14 @@
     font-size: 18px;
 }
 
+#content #help {
+    width: 735px;
+    text-align: left;
+    margin: 20px;
+    padding: 15px;
+    font-size: 16px;
+}
+
 #content #translation {
     color: black;
 }

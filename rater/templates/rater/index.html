@@ -19,6 +19,14 @@
                 <input type="submit" value="Start" />
             </form>
         </div>
+
+        <div id="content">
+            <div id="help">
+                {% autoescape off %}
+                    {{ global_preferences.rater__help_text }}
+                {% endautoescape %}
+            </div>
+        </div>
     </div>
 </body>
 </html>
