@@ -20,16 +20,23 @@ class RatingAdmin(admin.ModelAdmin):
     get_segment_translation.short_description = 'Translation'
     get_segment_translation.admin_order_field = 'segment__pk'
 
+
 class SegmentResource(resources.ModelResource):
     class Meta:
         model = Segment
+
 
 class SegmentAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ['id', 'translation', 'reference', 'batch_id']
 
 
 class RaterAdmin(admin.ModelAdmin):
-    list_display = ['email']
+    list_display = ['id', 'email', 'batch_id', 'get_rating_count']
+
+    def get_rating_count(self, rater):
+        return Rating.objects.filter(rater_id=rater.id).count()
+
+    get_rating_count.short_description = 'Rated Segments'
 
 
 admin.site.register(Segment, SegmentAdmin)
