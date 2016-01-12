@@ -24,18 +24,12 @@ def access(request):
     rater, created = Rater.objects.get_or_create(email=request.POST['email'])
     if created:
         max_raters = int(global_preferences['rater__number_of_raters_per_batch'])
-        is_rated = True
         batch_number = 0
         cache.clear()
 
         for b in range(1, int(global_preferences['rater__number_of_batches']) + 1):
             batch_number = b
-            for segment in Segment.objects.filter(batch_id=b):
-                if Rating.objects.filter(segment=segment).count() < max_raters:
-                    is_rated = False
-                    break
-
-            if not is_rated:
+            if Rater.objects.filter(batch_id=b).count() < max_raters:
                 break
 
         rater.batch_id = batch_number
