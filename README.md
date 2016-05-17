@@ -1,2 +1,2 @@
-# translation_rater
-Small web tool for rating translations on continuous scale from 0 to 100
+# Tradopad
+Small web tool for evaluating translations with adjustable scale and type of judgments
